@@ -1,0 +1,223 @@
+###Email variables###
+$smtpServer = 
+$smtpFrom =
+$smtpTo =
+
+###Email style###
+$style = "<style>"
+$style = $style + "BODY{font-family: Arial; font-size: 10pt;}"
+$style = $style + "table{border-width: 1px;border-style: solid;border-color: black;}"
+$style = $style + "th{border-width: 1px;padding: 2px;border-style: solid;border-color: black;}"
+$style = $style + "td{border-width: 1px;padding: 2px;border-style: solid;border-color: black;}"
+$style = $style + "</style>"
+
+###File Transfer Bits###
+
+###Transfer1###
+$transferstatus1 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t1lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t1lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t1result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t1nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer2###
+$transferstatus4 = if (Select-String -Pattern "Success" -Path "\\output$((Get-Date).AddDays(-1).ToString('yyyyMMdd'))1.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output$((Get-Date).AddDays(-1).ToString('yyyyMMdd'))1.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t4lastmod = (Get-Item "\\output$((Get-Date).AddDays(-1).ToString('yyyyMMdd'))1.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t4lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t4result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t4nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer3###
+$transferstatus5 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t5lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t5lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t5result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t5nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer4###
+$transferstatus6 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t6lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t6lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t6result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t6nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer5###
+$transferstatus7 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t7lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t7lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t7result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t7nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer6###
+$transferstatus8 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t8lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t8lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t8result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t8nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer7###
+$transferstatus9 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t9lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t9lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t9result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t9nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time"
+
+###Transfer8###
+$transferstatus10 = if (Select-String -Pattern "Success" -Path "\\output$(Get-date -Format yyyyMMdd)1.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output$(Get-date -Format yyyyMMdd)1.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t10lastmod = (Get-Item "\\output$(Get-date -Format yyyyMMdd)1.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t10lastRun = Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "TASK" | Get-ScheduledTaskInfo | Select-Object lastruntime |ForEach-Object($_.LastRunTime){Write-Output $_.LastRunTime.tostring(“dd/MM/yyyy HH:mm:ss”)}
+$t10result = if ((Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "TASK" | Get-ScheduledTaskInfo | Select-Object lasttaskresult)  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "TASK" | Get-ScheduledTaskInfo | Select-Object lasttaskresult)  -eq "0x00041301") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t10nextrun = Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "TASK" | Get-ScheduledTaskInfo | Select-Object nextruntime |ForEach-Object($_.nextRunTime){Write-Output $_.nextRunTime.tostring(“dd/MM/yyyy HH:mm:ss”)}
+
+###Transfer9###
+$transferstatus11 = if (Select-String -Pattern "Success" -Path "\\output$(Get-date -Format yyyyMMdd)1.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failed" -Path "\\output$(Get-date -Format yyyyMMdd)1.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t11lastmod = (Get-Item "\\output$(Get-date -Format yyyyMMdd)1.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t11lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t11result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301" -or "267009") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t11nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time"
+ 
+
+###HTML Message Body and Formating###
+
+$htmlbody = "
+<html>
+$style
+<body>
+<H2>Morning File Transfers - $(get-date -format 'dd/MM/yyyy')</H2>
+<table>
+  <tr>
+    <th>Transfer</th>
+    <th>Status</th>
+    <th>Status Modified</th>
+    <th>Last Run Time</th>
+    <th>Task</th>
+    <th>Next Run time</th>
+  </tr> 
+      <tr>
+    <td>Transfer1</td>
+    <td>$transferstatus5</td>
+    <td>$t5lastmod</td>
+    <td>" + $t5lastrun.'Last Run Time' + "</td>
+    <td>$t5result</td>
+    <td>" + $t5nextrun.'Next Run Time' + "</td>
+  </tr>
+     <tr>
+    <td>Transfer2</td>
+    <td>$transferstatus6</td>
+    <td>$t6lastmod</td>
+    <td>" + $t6lastrun.'Last Run Time' + "</td>
+    <td>$t6result</td>
+    <td>" + $t6nextrun.'Next Run Time' + "</td>
+  </tr>
+     <tr>
+    <td>Transfer3</td>
+    <td>$transferstatus7</td>
+    <td>$t7lastmod</td>
+    <td>" + $t7lastrun.'Last Run Time' + "</td>
+    <td>$t7result</td>
+    <td>" + $t7nextrun.'Next Run Time' + "</td>
+  </tr>
+  <tr>
+    <td>Transfer4</td>
+    <td>$transferstatus1</td>
+    <td>$t1lastmod</td>
+    <td>" + $t1lastrun.'Last Run Time' + "</td>
+    <td>$t1result</td>
+    <td>" + $t1nextrun.'Next Run Time' + "</td>
+  </tr>
+   <tr>
+    <td>Transfer5/td>
+    <td>$transferstatus4</td>
+    <td>$t4lastmod</td>
+    <td>" + $t4lastrun.'Last Run Time' + "</td>
+    <td>$t4result</td>
+    <td>" + $t4nextrun.'Next Run Time' + "</td>
+  </tr>
+  <tr>
+    <td>Transfer6</td>
+    <td>$transferstatus8</td>
+    <td>$t8lastmod</td>
+    <td>" + $t8lastrun.'Last Run Time' + "</td>
+    <td>$t8result</td>
+    <td>" + $t8nextrun.'Next Run Time' + "</td>
+  </tr>
+  <tr>
+    <td>Transfer7</td>
+    <td>$transferstatus9</td>
+    <td>$t9lastmod</td>
+    <td>" + $t9lastrun.'Last Run Time' + "</td>
+    <td>$t9result</td>
+    <td>" + $t9nextrun.'Next Run Time' + "</td>
+  </tr>
+      <tr>
+    <td>Transfer8</td>
+    <td>$transferstatus10</td>
+    <td>$t10lastmod</td>
+    <td>$t10lastrun</td>
+    <td>$t10result</td>
+    <td>$t10nextrun</td>
+   </tr>
+    <tr>
+    <td>Transfer9</td>
+    <td>$transferstatus11</td>
+    <td>$t11lastmod</td>
+    <td>" + $t11lastrun.'Last Run Time' + "</td>
+    <td>$t11result</td>
+    <td>" + $t11nextrun.'Next Run Time' + "</td>
+   </tr>
+
+</table>
+</body>
+</html>
+"
+$htmlbody = $htmlbody -replace "<td>Success</td>", "<td style='background-color: #33FF68'>Success</td>"
+$htmlbody = $htmlbody -replace "<td>Failed</td>", "<td style='background-color: #FB0000'>Failed</td>"   
+$htmlbody = $htmlbody -replace "<td>Pending</td>", "<td style='background-color: #FBA400'>Pending</td>"
+$htmlbody = $htmlbody -replace "<td>Running</td>", "<td style='background-color: #FBA400'>Running</td>"
+$htmlbody = $htmlbody -replace "<td>Completed</td>", "<td style='background-color: #33FF68'>Completed</td>"
+
+
+###Send email to confirm transfers success or failure###
+$messageSubject = "Morning File Transfers - $(get-date -format 'dd/MM/yyyy')"
+$message = New-Object System.Net.Mail.MailMessage $smtpfrom, $smtpto
+$message.Subject = $messageSubject
+$message.IsBodyHTML = $true
+$message.Body = $htmlbody
+$smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+$smtp.Send($message) 

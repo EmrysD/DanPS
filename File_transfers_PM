@@ -1,0 +1,122 @@
+###Email variables###
+$smtpServer = 
+$smtpFrom =
+$smtpTo = 
+
+###Email style###
+$style = "<style>"
+$style = $style + "BODY{font-family: Arial; font-size: 10pt;}"
+$style = $style + "table{border-width: 1px;border-style: solid;border-color: black;}"
+$style = $style + "th{border-width: 1px;padding: 2px;border-style: solid;border-color: black;}"
+$style = $style + "td{border-width: 1px;padding: 2px;border-style: solid;border-color: black;}"
+$style = $style + "</style>"
+
+###File Transfer bits###
+
+###Transfer 1###
+$transferstatus1 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t1lastMod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t1lastRun = Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "Task" | Get-ScheduledTaskInfo | Select-Object lastruntime |ForEach-Object($_.LastRunTime){Write-Output $_.LastRunTime.tostring(“dd/MM/yyyy HH:mm:ss”)}
+$t1result = if ((Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "Task" | Get-ScheduledTaskInfo | Select-Object lasttaskresult)  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "Task" | Get-ScheduledTaskInfo | Select-Object lasttaskresult)  -eq "0x00041301") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t1nextrun = Get-ScheduledTask -CimSession SERVER -TaskPath "\" -TaskName "Task" | Get-ScheduledTaskInfo | Select-Object nextruntime |ForEach-Object($_.nextRunTime){Write-Output $_.nextRunTime.tostring(“dd/MM/yyyy HH:mm:ss”)}
+
+###Transfer 2###
+$transferstatus2 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t2lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+
+
+###Transfer 3###
+$transferstatus3 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t3lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t3lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time" 
+$t3result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t3nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###Transfer 4###
+$transferstatus4 = if (Select-String -Pattern "Success" -Path "\\output.txt" -Quiet) {Write-output "Success"}
+    elseif (Select-String -Pattern "Failure" -Path "\\output.txt" -Quiet) {Write-output "Failed"}
+        else {Write-Output "Pending"}
+$t4lastmod = (Get-Item "\\output.txt").LastWriteTime.ToString("dd/MM/yyyy HH:mm:ss")
+$t4lastRun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Run Time"
+$t4result = if ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0" -or "0x0") {Write-Output "Completed"}
+    elseif ((schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Last Result")  -eq "0x00041301") {Write-Output "Running"}
+        Else {Write-Output "Failed"}
+$t4nextrun = schtasks.exe /query /s SERVER /v /tn "TASK" /fo CSV | ConvertFrom-Csv | Select-Object "Next Run Time" 
+
+###HTML Message Body and Formating###
+
+$htmlbody = "
+<html>
+$style
+<body>
+<H2> Afternoon File Transfers - $(get-date -format 'dd/MM/yyyy') </H2>
+<table>
+  <tr>
+    <th>Transfer</th>
+    <th>Status</th>
+    <th>Status Modified</th>
+    <th>Last Run Time</th>
+    <th>Task</th>
+    <th>Next Run time</th>
+  </tr> 
+  <tr>
+    <td>TRANSFER1</td>
+    <td>$transferstatus1</td>
+    <td>$t1lastMod</td>
+    <td>$t1lastrun</td>
+    <td>$t1result</td>
+    <td>$t1Nextrun</td>
+  </tr>
+   <tr>
+    <td>TRANSFER2</td>
+    <td>$transferstatus2</td>
+    <td>$t2lastmod</td>
+    <td>File Watcher</td>
+    <td>File Watcher </td>
+    <td>File Watcher</td>
+  </tr>
+  <tr>
+    <td>TRANSFER3</td>
+    <td>$transferstatus3</td>
+    <td>$t3lastmod</td>
+    <td>" + $t3lastrun.'Last Run Time' + "</td>
+    <td>$t3result</td>
+    <td>" + $t3nextrun.'Next Run Time' + "</td>
+  </tr>
+    <tr>
+    <td>TRANSFER4</td>
+    <td>$transferstatus4</td>
+    <td>$t4lastmod</td>
+    <td>" + $t4lastrun.'Last Run Time' + "</td>
+    <td>$t4result</td>
+    <td>" + $t4nextrun.'Next Run Time' + "</td>
+   </tr>
+</table>
+</body>
+</html>
+"
+$htmlbody = $htmlbody -replace "<td>Success</td>", "<td style='background-color: #33FF68'>Success</td>"
+$htmlbody = $htmlbody -replace "<td>Failed</td>", "<td style='background-color: #FB0000'>Failed</td>"   
+$htmlbody = $htmlbody -replace "<td>Pending</td>", "<td style='background-color: #FBA400'>Pending</td>"
+$htmlbody = $htmlbody -replace "<td>Running</td>", "<td style='background-color: #FBA400'>Running</td>"
+$htmlbody = $htmlbody -replace "<td>Completed</td>", "<td style='background-color: #33FF68'>Completed</td>"
+
+
+###Send email to confirm transfers success or failure###
+$messageSubject = "Afternoon File Transfers - $(get-date -format 'dd/MM/yyyy')"
+$message = New-Object System.Net.Mail.MailMessage $smtpfrom, $smtpto
+$message.Subject = $messageSubject
+$message.IsBodyHTML = $true
+$message.Body = $htmlbody
+$smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+$smtp.Send($message) 

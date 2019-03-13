@@ -1,0 +1,72 @@
+##Email variables
+$smtpServer = "A SERVER"
+$smtpFrom = "Blah@blah.com"
+$smtpTo = "Blah@Blah.com"
+
+##Email style
+$style = "<style>BODY{font-family: Arial; font-size: 10pt;}"
+$style = $style + "TABLE{border: 1px solid black; border-collapse: collapse;}"
+$style = $style + "TH{border: 1px solid black; background: #dddddd; padding: 5px; }"
+$style = $style + "TD{border: 1px solid black; padding: 5px; }"
+$style = $style + "</style>"
+
+
+###Actual transfer bits from here###
+
+
+##Count how many files in the location
+$filecount = @(dir 'E:\Dan\Transfer\Outgoing\').Count
+
+##List files in outgoing folder
+$filenames = Get-ChildItem -Path 'E:\Dan\Transfer\Outgoing\' -Recurse
+
+
+##Start of transfer mail with files
+$messageSubject = "Daily Transfer started. $filecount files being sent"
+$message = New-Object System.Net.Mail.MailMessage $smtpfrom, $smtpto
+$message.Subject = $messageSubject
+$message.IsBodyHtml = $true
+$message.Body = $filenames | ConvertTo-Html -property Name,Lastwritetime -head $style 
+$smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+$smtp.Send($message) 
+
+##Compress the files individualy
+gzip.exe -r "E:\Dan\Transfer\Outgoing\"
+
+##Create new ok file
+New-Item -ItemType File -Path "E:\Dan\Transfer\Outgoing\file.OK"
+
+##Start Connect Direct process
+get-content "E:\Dan\Transfer\transfer.txt" | direct -n SERVER -uuser -ppassword > "E:\Dan\Transfer\Output.txt"
+
+##File transfer status
+$transferstatus = if (Select-String -Pattern "Failure" -Path "E:\Dan\Transfer\Output.txt" -Quiet) {Write-Output "Failed"}
+    else {Write-Output "Success"}
+
+##Send email to confirm transfer success/failure
+$messageSubject = "Daily Transfer Complete - $transferstatus"
+$message = New-Object System.Net.Mail.MailMessage $smtpfrom, $smtpto
+$message.Subject = $messageSubject
+$message.Body = Get-Content "E:\Dan\Transfer\Output.txt" | Out-String 
+$smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+$smtp.Send($message) 
+
+##Create archive folder and move files into it
+$Archivepath = "E:\Dan\Transfer\Archive\$((Get-Date).ToString('ddMMyy'))"
+If(!(test-path $Archivepath))
+{
+New-Item -ItemType Directory -Force -Path $Archivepath
+}
+Move-Item -Force -Path "E:\Dan\Transfer\Outgoing\*" -Destination ($Archivepath)
+
+$postfilecount = @(dir 'E:\Dan\Transfer\Outgoing\').Count
+
+##Send email to confirm move to archive
+$messageSubject = "Daily Transfer - Move to Archive Complete"
+$message = New-Object System.Net.Mail.MailMessage $smtpfrom, $smtpto
+$message.Subject = $messageSubject
+$message.Body = Write-Output "The files have been moved over to the archive location. There are $postfilecount files in the outgoing folder."
+$smtp = New-Object Net.Mail.SmtpClient($smtpServer)
+$smtp.Send($message) 
+
+
